@@ -1,0 +1,21 @@
+__pycache__/
+.pytest_cache
+.env*
+**/.coverage
+.mypy_cache
+
+# Jetbrains
+.idea/
+
+# VS Code
+.vscode/
+.vim/
+
+venv/
+.venv/
+.git/
+.cache/
+static/
+tmp/
+
+.DS_Store
