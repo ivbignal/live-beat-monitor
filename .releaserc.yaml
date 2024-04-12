@@ -1,0 +1,114 @@
+# Common configuration
+branches:
+  - main
+ci: true
+debug: true
+preset: 'conventionalcommits'
+
+# Plugins configuration
+plugins:
+  - '@semantic-release/commit-analyzer'
+  - '@semantic-release/release-notes-generator'
+  - '@semantic-release/github'
+  - '@semantic-release/changelog'
+  - '@semantic-release/exec'
+
+verifyConditions:
+  - '@semantic-release/changelog'
+    # Verify the presence and the validity of the configuration
+  - '@semantic-release/git'
+    # Verify the presence and the validity of the Git authentication
+    # and release configuration
+  - '@semantic-release/github'
+    # Verify the presence and the validity of the GitLab authentication
+    # and release configuration
+
+analyzeCommits:
+  - path: '@semantic-release/commit-analyzer'
+    releaseRules:
+      - breaking: true
+        release: major
+      - type: build     # Changes that affect the build system or external dependencies
+        release: patch
+      - type: chore     # Other changes that don't modify src or test files
+        release: false
+      - type: ci        # Changes to our CI configuration files and scripts
+        release: false
+      - type: docs      # Documentation only changes
+        release: patch
+      - type: feat      # A new feature
+        release: minor
+      - type: fix       # A bug fix
+        release: patch
+      - type: perf      # A code change that improves performance
+        release: patch
+      - type: refactor  # A code change that neither fixes a bug nor adds a feature
+        release: false
+      - type: revert    # Reverts a previous commit
+        release: patch
+      - type: style     # Changes that do not affect the meaning of the code
+        release: false
+      - type: test      # Adding missing tests or correcting existing tests
+        release: false
+
+generateNotes:
+  - path: '@semantic-release/release-notes-generator'
+    writerOpts:
+      groupBy: 'type'
+      commitGroupsSort: 'title'
+      commitsSort: 'header'
+    linkCompare: true
+    linkReferences: true
+    parserOpts:
+      # detect JIRA issues in merge commits
+      issuePrefixes: ['LBM-']
+      mergePattern: "^Merge branch '(.*)' into (.*)$"
+      mergeCorrespondence: ['branch_src', 'branch_dst']
+    presetConfig:
+      types:  # looks like it only works with 'conventionalcommits' preset
+        - type: 'build'
+          section: '🦊 CI/CD'
+          hidden: false
+        - type: 'chore'
+          section: '🔧 Other'
+          hidden: false
+        - type: 'ci'
+          section: '🦊 CI/CD'
+          hidden: false
+        - type: 'docs'
+          section: '📔 Docs'
+          hidden: false
+        - type: 'example'
+          section: '📝 Examples'
+          hidden: false
+        - type: 'feat'
+          section: '🚀 Features'
+          hidden: false
+        - type: 'fix'
+          section: '🛠 Fixes'
+          hidden: false
+        - type: 'perf'
+          section: '⏩ Performance'
+          hidden: false
+        - type: 'refactor'
+          section: ':scissors: Refactor'
+          hidden: false
+        - type: 'revert'
+          section: '🙅‍ Reverts'
+          hidden: false
+        - type: 'style'
+          section: '💈 Style'
+          hidden: false
+        - type: 'test'
+          section: '🧪 Tests'
+          hidden: false
+
+prepare:
+  - path: '@semantic-release/exec'
+    cmd: 'echo -n ${nextRelease.version} > VERSION'
+  - path: '@semantic-release/changelog'
+    changelogFile: 'CHANGELOG.md'
+  - path: '@semantic-release/exec'
+
+publish:
+  - path: '@semantic-release/github'
