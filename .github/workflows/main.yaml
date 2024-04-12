@@ -1,0 +1,51 @@
+name: Build and package
+run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+
+on:
+  push:
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ['windows-latest', 'ubuntu-latest', 'macos-latest']
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-python@v2
+      with:
+        python-version: 3.11.8
+
+    - run: pip install poetry
+    - run: poetry config virtualenvs.create false
+    - run: poetry install --no-interaction --no-root
+    - run: pyinstaller build.spec
+    - uses: actions/upload-artifact@v2
+      with:
+        path: dist/*
+
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # to be able to publish a GitHub release
+      issues: write # to be able to comment on released issues
+      pull-requests: write # to be able to comment on released pull requests
+      id-token: write # to enable use of OIDC for npm provenance
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "lts/*"
+      - name: Install dependencies
+        run: npm install -g semantic-release @semantic-release/github @semantic-release/exec @semantic-release/changelog @semantic-release/git conventional-changelog-conventionalcommits
+      - name: Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.SR_GITHUB_TOKEN }}
+        run: npx semantic-release

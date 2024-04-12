@@ -4,6 +4,9 @@ __pycache__/
 **/.coverage
 .mypy_cache
 
+build/
+dist/
+
 # Jetbrains
 .idea/
 
@@ -19,3 +22,5 @@ static/
 tmp/
 
 .DS_Store
+
+show/

@@ -6,7 +6,9 @@ authors = ["Ignat Balakirev <ivbignal@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "3.11.8"
+pyqt6 = "6.6.1"
+pyinstaller = "6.5.0"
 
 
 [build-system]
