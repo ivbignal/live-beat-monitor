@@ -19,8 +19,8 @@ jobs:
         python-version: 3.11.8
 
     - run: pip install poetry
-    - run: poetry shell
-    - run: poetry install --no-root
+    - run: poetry config virtualenvs.create false
+    - run: poetry install --no-interaction --no-root
     - run: pyinstaller build.spec
     - uses: actions/upload-artifact@v2
       with:
