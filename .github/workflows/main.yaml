@@ -29,7 +29,7 @@ jobs:
       run: ./pack.sh -p ${{ matrix.os }}
     - name: Create windows download archive
       if: matrix.os == 'windows-latest'
-      run: Compress-Archive dist art/LiveBeatMonitor.zip
+      run: mkdir art & Compress-Archive dist art/LiveBeatMonitor.zip
     - uses: actions/upload-artifact@v4
       with:
         path: art/*
