@@ -24,9 +24,11 @@ jobs:
     - run: poetry config virtualenvs.create false
     - run: poetry install --no-interaction --no-root
     - run: pyinstaller build.spec
+    - name: Create download archive
+      run: ./pack.sh -p ${{ matrix.os }}
     - uses: actions/upload-artifact@v4
       with:
-        path: dist/*
+        path: art/*
         name: build-${{ matrix.os }}
 
   release:
