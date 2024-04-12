@@ -1,8 +1,10 @@
 name: Build and package
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+run-name: ${{ github.actor }} is building new version 🚀
 
 on:
   push:
+    branches:
+      - master
 
 jobs:
   build:
@@ -29,6 +31,7 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
+    needs: build
     permissions:
       contents: write # to be able to publish a GitHub release
       issues: write # to be able to comment on released issues
