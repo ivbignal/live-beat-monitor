@@ -1,6 +1,7 @@
 # Common configuration
 branches:
-  - main
+  - master
+  - fet/base_setup
 ci: true
 debug: true
 preset: 'conventionalcommits'
