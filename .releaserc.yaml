@@ -116,3 +116,7 @@ publish:
     assets:
       - path: "builds/build-macos-latest/LiveBeatMonitor.tar.gz"
         label: "MacOS App"
+      - path: "builds/build-windows-latest/LiveBeatMonitor.zip"
+        label: "Windows Executable"
+      - path: "builds/build-ubuntu-latest/LiveBeatMonitor.tar.gz"
+        label: "Ubuntu Executable"
