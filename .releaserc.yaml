@@ -114,5 +114,5 @@ prepare:
 publish:
   - path: '@semantic-release/github'
     assets:
-      - path: "dist/LiveBeatMonitor.app"
+      - path: "macos-latest-build/dist/LiveBeatMonitor.app"
         label: "MacOS App"

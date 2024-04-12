@@ -27,6 +27,7 @@ jobs:
     - uses: actions/upload-artifact@v2
       with:
         path: dist/*
+        name: ${{ matrix.os }}-build
 
   release:
     name: Release
@@ -48,6 +49,8 @@ jobs:
           node-version: "lts/*"
       - name: Install dependencies
         run: npm install -g semantic-release @semantic-release/github @semantic-release/exec @semantic-release/changelog @semantic-release/git conventional-changelog-conventionalcommits
+      - name: Download builds
+        uses: actions/download-artifact@v4
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.SR_GITHUB_TOKEN }}
