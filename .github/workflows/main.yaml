@@ -24,8 +24,12 @@ jobs:
     - run: poetry config virtualenvs.create false
     - run: poetry install --no-interaction --no-root
     - run: pyinstaller build.spec
-    - name: Create download archive
+    - name: Create unix download archive
+      if: matrix.os != 'windows-latest'
       run: ./pack.sh -p ${{ matrix.os }}
+    - name: Create windows download archive
+      if: matrix.os == 'windows-latest'
+      run: zip -r art/LiveBeatMonitor.zip dist
     - uses: actions/upload-artifact@v4
       with:
         path: art/*
