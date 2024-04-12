@@ -21,8 +21,16 @@ class PerformWindow(QWidget):
         self.setWindowFlag(Qt.WindowType.WindowTransparentForInput)
         self.setWindowState(Qt.WindowState.WindowFullScreen)
 
+        track_label_font = QFont()
+        track_label_font.setBold(True)
+        track_label_font.setPointSize(100)
         self.current_track_label = QLabel()
         self.current_track_label.setText('No track selected')
+        self.current_track_label.setFont(track_label_font)
+        self.next_track_label = QLabel()
+        self.next_track_label.setText('Last track')
+        self.next_track_label.setFont(track_label_font)
+
         self.track_beat = QLabel()
         self.track_beat.setText('00|00')
         self.track_beat.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -36,6 +44,8 @@ class PerformWindow(QWidget):
 
         layout = QVBoxLayout()
         layout.addWidget(self.current_track_label)
+        layout.addWidget(self.next_track_label)
+        layout.addStretch()
         layout.addWidget(self.track_beat)
 
         self.setLayout(layout)
@@ -50,11 +60,21 @@ class PerformWindow(QWidget):
             self.current_track_label.setText(
                 f'#{track.position}: {track.title}',
             )
+            self.update_track_beat()
             if track.item_type == TRACK:
                 self.update_track_beat(track.player.position())
                 track.player.positionChanged.connect(self.update_track_beat)
+            try:
+                next_track = tracks.get()[current_track.get() + 1]
+                self.next_track_label.setText(
+                    f'-> #{next_track.position}: {next_track.title}',
+                )
+            except IndexError:
+                self.next_track_label.setText('Last track')
+        else:
+            self.current_track_label.setText('No track selected')
 
-    def update_track_beat(self, position):
+    def update_track_beat(self, position=0):
         track = tracks.get()[current_track.get()]
         if track.item_type == TRACK:
             millis = position - track.delay_seconds * 1000
