@@ -64,19 +64,11 @@ class MainWindow(widgets.QMainWindow):
 
     def keyPressEvent(self, e: QKeyEvent):
         key = e.key()
-        if key == 16777234:  # Left arrow
+        if key in [16777234, 16777235, 16777238]:  # Left arrow, up arrow, page up
             if current_track.get() > 0:
                 current_track.set(current_track.get() - 1)
             self.update_item_selection()
-        if key == 16777236:  # Right arrow
-            if current_track.get() < len(tracks.get()) - 1:
-                current_track.set(current_track.get() + 1)
-            self.update_item_selection()
-        if key == 16777235:  # Up arrow
-            if current_track.get() > 0:
-                current_track.set(current_track.get() - 1)
-            self.update_item_selection()
-        if key == 16777237:  # Down arrow
+        if key in [16777236, 16777237, 16777239]:  # Right arrow, down arrow, page down
             if current_track.get() < len(tracks.get()) - 1:
                 current_track.set(current_track.get() + 1)
             self.update_item_selection()
