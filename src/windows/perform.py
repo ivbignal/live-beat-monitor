@@ -33,6 +33,7 @@ class PerformWindow(QWidget):
 
         self.track_beat = QLabel()
         self.track_beat.setText('00|00')
+        self.track_beat.setStyleSheet("background-color:rgb(255,255,255); color:black;")
         self.track_beat.setAlignment(Qt.AlignmentFlag.AlignCenter)
         track_beat_font = QFont()
         track_beat_font.setBold(True)
@@ -49,6 +50,12 @@ class PerformWindow(QWidget):
         layout.addWidget(self.track_beat)
 
         self.setLayout(layout)
+
+    def setPlayingStatus(self, is_playing):
+        if is_playing:
+            self.track_beat.setStyleSheet("background-color:rgb(140,0,0); color:white;")
+        else:
+            self.track_beat.setStyleSheet("background-color:rgb(255,255,255); color:black;")
 
     def closeEvent(self, a0):
         super().closeEvent(a0)

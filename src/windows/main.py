@@ -88,13 +88,16 @@ class MainWindow(widgets.QMainWindow):
                 if track.item_type == TRACK:
                     if track.player.isPlaying():
                         track.player.pause()
+                        self.perform_window.setPlayingStatus(False)
                     else:
                         track.player.play()
+                        self.perform_window.setPlayingStatus(True)
         if key == 16777220:  # Return
             if len(tracks.get()) > 0:
                 track = tracks.get()[current_track.get()]
                 if track.item_type == TRACK:
                     track.player.stop()
+                    self.perform_window.setPlayingStatus(False)
 
     def toggle_perform_mode(self):
         if perform_mode.get():
