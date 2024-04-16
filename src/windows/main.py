@@ -36,6 +36,8 @@ class MainWindow(widgets.QMainWindow):
         show_selection_container.setLayout(show_selection_layout)
 
         # Show items list
+        self.track_list_wrapper = widgets.QScrollArea()
+        self.track_list_wrapper.keyPressEvent = self.keyPressEvent
         self.show_items_list = widgets.QWidget()
 
         self.show_items_layout = widgets.QVBoxLayout()
@@ -43,6 +45,14 @@ class MainWindow(widgets.QMainWindow):
         self.clear_show_items()
 
         self.show_items_list.setLayout(self.show_items_layout)
+        self.track_list_wrapper.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
+        self.track_list_wrapper.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        size_policy = widgets.QSizePolicy()
+        size_policy.setHorizontalPolicy(widgets.QSizePolicy.Policy.Expanding)
+        # self.track_list_wrapper.setSizePolicy(size_policy)
+        self.track_list_wrapper.setWidgetResizable(True)
+        self.track_list_wrapper.setWidget(self.show_items_list)
+        self.track_list_wrapper.resize(400, 800)
 
         # Perform button
         self.perform_button = widgets.QPushButton('Perform mode')
@@ -50,8 +60,8 @@ class MainWindow(widgets.QMainWindow):
         self.perform_button.clicked.connect(self.toggle_perform_mode)
 
         layout.addWidget(show_selection_container)
-        layout.addWidget(self.show_items_list)
-        layout.addStretch()
+        layout.addWidget(self.track_list_wrapper)
+        # layout.addStretch()
         layout.addWidget(self.perform_button)
 
         container.setLayout(layout)
