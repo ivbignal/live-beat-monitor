@@ -15,3 +15,9 @@ Open a show folder in LiveBeatMonitor (ignore errors if present - they tell you 
 Navigate using arrow keys or `PgUp`/`PgDown`, hit `space` to play/pause, hit `enter` to stop and reset to beginning.
 
 Use `Perform mode` button to toggle fullscreen window which you can place on the on-stage separate monitor or leave on main monitor of your laptop if you planning to place it in front of yout band on stage.
+
+Use `[` and `]` to change font scale of text track.
+
+Use `Esc` to toggle Perform mode.
+
+Use `o` key to dive into open show folder selection dialog.
