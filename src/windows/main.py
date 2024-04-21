@@ -36,6 +36,8 @@ class MainWindow(widgets.QMainWindow):
         show_selection_container.setLayout(show_selection_layout)
 
         # Show items list
+        self.track_list_wrapper = widgets.QScrollArea()
+        self.track_list_wrapper.keyPressEvent = self.keyPressEvent
         self.show_items_list = widgets.QWidget()
 
         self.show_items_layout = widgets.QVBoxLayout()
@@ -43,6 +45,14 @@ class MainWindow(widgets.QMainWindow):
         self.clear_show_items()
 
         self.show_items_list.setLayout(self.show_items_layout)
+        self.track_list_wrapper.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
+        self.track_list_wrapper.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        size_policy = widgets.QSizePolicy()
+        size_policy.setHorizontalPolicy(widgets.QSizePolicy.Policy.Expanding)
+        # self.track_list_wrapper.setSizePolicy(size_policy)
+        self.track_list_wrapper.setWidgetResizable(True)
+        self.track_list_wrapper.setWidget(self.show_items_list)
+        self.track_list_wrapper.resize(400, 800)
 
         # Perform button
         self.perform_button = widgets.QPushButton('Perform mode')
@@ -50,8 +60,8 @@ class MainWindow(widgets.QMainWindow):
         self.perform_button.clicked.connect(self.toggle_perform_mode)
 
         layout.addWidget(show_selection_container)
-        layout.addWidget(self.show_items_list)
-        layout.addStretch()
+        layout.addWidget(self.track_list_wrapper)
+        # layout.addStretch()
         layout.addWidget(self.perform_button)
 
         container.setLayout(layout)
@@ -64,19 +74,11 @@ class MainWindow(widgets.QMainWindow):
 
     def keyPressEvent(self, e: QKeyEvent):
         key = e.key()
-        if key == 16777234:  # Left arrow
+        if key in [16777234, 16777235, 16777238]:  # Left arrow, up arrow, page up
             if current_track.get() > 0:
                 current_track.set(current_track.get() - 1)
             self.update_item_selection()
-        if key == 16777236:  # Right arrow
-            if current_track.get() < len(tracks.get()) - 1:
-                current_track.set(current_track.get() + 1)
-            self.update_item_selection()
-        if key == 16777235:  # Up arrow
-            if current_track.get() > 0:
-                current_track.set(current_track.get() - 1)
-            self.update_item_selection()
-        if key == 16777237:  # Down arrow
+        if key in [16777236, 16777237, 16777239]:  # Right arrow, down arrow, page down
             if current_track.get() < len(tracks.get()) - 1:
                 current_track.set(current_track.get() + 1)
             self.update_item_selection()
@@ -86,13 +88,16 @@ class MainWindow(widgets.QMainWindow):
                 if track.item_type == TRACK:
                     if track.player.isPlaying():
                         track.player.pause()
+                        self.perform_window.setPlayingStatus(False)
                     else:
                         track.player.play()
+                        self.perform_window.setPlayingStatus(True)
         if key == 16777220:  # Return
             if len(tracks.get()) > 0:
                 track = tracks.get()[current_track.get()]
                 if track.item_type == TRACK:
                     track.player.stop()
+                    self.perform_window.setPlayingStatus(False)
 
     def toggle_perform_mode(self):
         if perform_mode.get():
