@@ -98,6 +98,14 @@ class MainWindow(widgets.QMainWindow):
                 if track.item_type == TRACK:
                     track.player.stop()
                     self.perform_window.setPlayingStatus(False)
+        if key == 93:  # ]
+            self.perform_window.md_field.zoomIn()
+        if key == 91:  # [
+            self.perform_window.md_field.zoomOut()
+        if key == 16777216:  # Esc
+            self.toggle_perform_mode()
+        if key == 79:  # O
+            self.open_show()
 
     def toggle_perform_mode(self):
         if perform_mode.get():

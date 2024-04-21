@@ -27,6 +27,7 @@ class Track:
     item_type: TrackType
     bpm: float
     delay_seconds: float
+    text: str
 
     def __init__(self, path: Path):
         self.path = path
@@ -65,6 +66,8 @@ class Track:
                 item_layout.addWidget(
                     widgets.QLabel(f'TEXT')
                 )
+                with open(self.path, 'r') as f:
+                    self.text = f.read()
             self.__item_container.setLayout(item_layout)
 
     def __repr__(self):

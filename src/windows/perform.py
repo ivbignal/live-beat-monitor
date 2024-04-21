@@ -1,6 +1,6 @@
 from PyQt6.QtCore import pyqtSignal, Qt
 from PyQt6.QtGui import QFont
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QTextEdit
 
 from context import tracks, current_track
 from utils.track import TRACK
@@ -31,6 +31,9 @@ class PerformWindow(QWidget):
         self.next_track_label.setText('Last track')
         self.next_track_label.setFont(track_label_font)
 
+        self.track_beat_container = QWidget()
+        track_beat_container_layout = QVBoxLayout()
+
         self.track_beat = QLabel()
         self.track_beat.setText('00|00')
         self.track_beat.setStyleSheet("background-color:rgb(255,255,255); color:black;")
@@ -41,14 +44,27 @@ class PerformWindow(QWidget):
         track_beat_font.setFamily('Monospace')
         track_beat_font.setStyleHint(QFont.StyleHint.Monospace)
         self.track_beat.setFont(track_beat_font)
+
+        track_beat_container_layout.addStretch()
+        track_beat_container_layout.addWidget(self.track_beat)
+        self.track_beat_container.setLayout(track_beat_container_layout)
+
+        self.md_field = QTextEdit()
+        self.md_field.setReadOnly(True)
+        self.md_field.zoomIn(40)
+        # self.md_field.sizePolicy().verticalStretch()
+
         # self.track_beat.setSizePolicy()
 
         layout = QVBoxLayout()
         layout.addWidget(self.current_track_label)
         layout.addWidget(self.next_track_label)
-        layout.addStretch()
-        layout.addWidget(self.track_beat)
+        # layout.addStretch()
+        layout.addWidget(self.track_beat_container)
+        layout.addWidget(self.md_field)
+        # layout.addStretch()
 
+        self.md_field.hide()
         self.setLayout(layout)
 
     def setPlayingStatus(self, is_playing):
@@ -91,7 +107,10 @@ class PerformWindow(QWidget):
             beat = int(total_beat % 4) + 1
             part = int(total_beat % 16 / 4) + 1
             phrase = int(total_beat / 16) + 1
-            self.track_beat.show()
+            self.track_beat_container.show()
+            self.md_field.hide()
             self.track_beat.setText(f'{phrase}: {part}|{beat}')
         else:
-            self.track_beat.hide()
+            self.track_beat_container.hide()
+            self.md_field.show()
+            self.md_field.setMarkdown(track.text)
