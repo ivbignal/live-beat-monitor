@@ -3,7 +3,7 @@ from pathlib import Path
 
 from PyQt6 import QtWidgets as widgets
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QKeyEvent
+from PyQt6.QtGui import QKeyEvent, QScreen
 
 from context import perform_mode, show_directory_path, get_show_name, current_track, tracks
 from utils.track import Track, TrackException, TRACK, TEXT
@@ -113,7 +113,11 @@ class MainWindow(widgets.QMainWindow):
             self.perform_window.hide()
         else:
             perform_mode.set(True)
-            self.perform_window.show()
+            monitors = QScreen.virtualSiblings(self.screen())
+            if len(monitors) > 1:
+                monitor = monitors[1].availableGeometry()
+                self.perform_window.move(monitor.left(), monitor.top())
+            self.perform_window.showFullScreen()
         self.perform_button.setChecked(perform_mode.get())
         self.activateWindow()
 

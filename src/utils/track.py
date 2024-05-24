@@ -28,6 +28,9 @@ class Track:
     bpm: float
     delay_seconds: float
     text: str
+    chords_begin: str
+    chords_verse: str
+    chords_chorus: str
 
     def __init__(self, path: Path):
         self.path = path
@@ -45,6 +48,14 @@ class Track:
                 if self.item_type == TRACK:
                     self.bpm = float(data[2])
                     self.delay_seconds = float(data[3])
+                    try:
+                        self.chords_begin = data[4]
+                        self.chords_verse = data[5]
+                        self.chords_chorus = data[6]
+                    except IndexError:
+                        self.chords_begin = 'No data'
+                        self.chords_verse = 'No data'
+                        self.chords_chorus = 'No data'
             except Exception as e:
                 raise TrackException(e)
             self.__item_container = widgets.QWidget()

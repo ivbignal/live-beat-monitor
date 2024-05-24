@@ -45,7 +45,27 @@ class PerformWindow(QWidget):
         track_beat_font.setStyleHint(QFont.StyleHint.Monospace)
         self.track_beat.setFont(track_beat_font)
 
+
+        chords_label_font = QFont()
+        chords_label_font.setBold(True)
+        chords_label_font.setPointSize(60)
+
+        self.chords_begin = QLabel()
+        self.chords_begin.setText('Beginning: ')
+        self.chords_begin.setFont(chords_label_font)
+
+        self.chords_verse = QLabel()
+        self.chords_verse.setText('Verse: ')
+        self.chords_verse.setFont(chords_label_font)
+
+        self.chords_chorus = QLabel()
+        self.chords_chorus.setText('Chorus: ')
+        self.chords_chorus.setFont(chords_label_font)
+
         track_beat_container_layout.addStretch()
+        track_beat_container_layout.addWidget(self.chords_begin)
+        track_beat_container_layout.addWidget(self.chords_verse)
+        track_beat_container_layout.addWidget(self.chords_chorus)
         track_beat_container_layout.addWidget(self.track_beat)
         self.track_beat_container.setLayout(track_beat_container_layout)
 
@@ -110,6 +130,9 @@ class PerformWindow(QWidget):
             self.track_beat_container.show()
             self.md_field.hide()
             self.track_beat.setText(f'{phrase}: {part}|{beat}')
+            self.chords_begin.setText('Beginning: ' + track.chords_begin)
+            self.chords_verse.setText('Verse: ' + track.chords_verse)
+            self.chords_chorus.setText('Chorus: ' + track.chords_chorus)
         else:
             self.track_beat_container.hide()
             self.md_field.show()
